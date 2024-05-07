@@ -14,6 +14,6 @@ function [error, compressedImage] = compressImage(image, N)
     errordenom = numel(image) * 3 * 256;
     error = 100 * errornum / errordenom;
     size(image);
-    "Original singnificant numbers: "; N1;
-    "New singnificant numbers: "; N;
+    "Original singular values: "; N1;
+    "New singular values: "; N;
 end
