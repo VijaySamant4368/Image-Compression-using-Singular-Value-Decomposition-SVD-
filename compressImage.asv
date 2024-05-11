@@ -13,6 +13,11 @@ function [error, compressedImage] = compressImage(image, N)
 
 
 
+
+
+
+
+
 ErrorMatrix = originalImage - ComMatrix;
 ErrorMatrixAbs = abs(ErrorMatrix);
 m=size(ErrorMatrix, 1);
@@ -22,7 +27,7 @@ threshold = 25.6;
 for i = 1:m
     for j = 1:n
         delta=max(ErrorMatrixAbs(i, j, 1),ErrorMatrixAbs(i, j, 2) );
-        delta=max(delta,ErrorMatrixAbs(i, j, 3));
+        delta=max(delta, , ErrorMatrixAbs(i, j, 3))'
         if delta> threshold
             diff = diff + 1;
         else
@@ -54,7 +59,7 @@ maxPixelValue = max(originalImage(:));
 compressionErrorPercentage = (mse / (maxPixelValue^2)) * 100;
 
 % Display the compression error percentage
-% disp(['Compression Error Percentage: ', num2str(compressionErrorPercentage), '%']);
+disp(['Compression Error Percentage: ', num2str(compressionErrorPercentage), '%']);
 
 errors=compressionErrorPercentage;
 error=[error1 (sum(errors))];

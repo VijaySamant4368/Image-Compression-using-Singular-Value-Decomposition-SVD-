@@ -1,7 +1,7 @@
 imageName = 'color.png';
 image = imread(imageName);
 
-N = 10;
+N = 0;
 
 [error, compressedimage] = compressImage(image, N);
 [rLayer, gLayer, bLayer]=splitImage(image);
@@ -51,3 +51,5 @@ title('Compressed Green Image')
 subplot(3,3,9);
 imshow(uint8(bComLayer), 'InitialMagnification', 'fit');
 title('Compressed Blue Image')
+
+error
