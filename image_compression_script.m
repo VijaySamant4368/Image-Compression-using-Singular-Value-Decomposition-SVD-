@@ -1,17 +1,22 @@
-imageName = 'color.png';
+imageName = 'BigBlock.png';
 image = imread(imageName);
 
-N = 0;
+N = 4;
 
 [error, compressedimage] = compressImage(image, N);
 [rLayer, gLayer, bLayer]=splitImage(image);
 [rComLayer, gComLayer, bComLayer]=splitImage(compressedimage);
 
 % Save the compressed image
-imwrite(uint8(compressedimage), 'compressed_image.jpg');
-imwrite(uint8(rLayer), 'red_image.jpg');
-imwrite(uint8(gLayer), 'green_image.jpg');
-imwrite(uint8(bLayer), 'blue_image.jpg');
+imwrite(uint8(compressedimage), 'compressed_image.png');
+% imwrite(uint8(rLayer), 'red_image.png');
+% imwrite(uint8(gLayer), 'green_image.png');
+% imwrite(uint8(bLayer), 'blue_image.png');
+imwrite(uint8(rComLayer), 'red_image_compressed.png');
+imwrite(uint8(gComLayer), 'green_image_compressed.png');
+
+imwrite(uint8(bComLayer), 'blue_image_compressed.png');
+
 
 % Display original image
 subplot(3, 3, 1);
@@ -51,5 +56,7 @@ title('Compressed Green Image')
 subplot(3,3,9);
 imshow(uint8(bComLayer), 'InitialMagnification', 'fit');
 title('Compressed Blue Image')
+
+image
 
 error

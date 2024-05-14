@@ -5,11 +5,9 @@ function [error, compressedImage] = compressImage(image, N)
         S(N+1:end, :) = 0;      %For all columns beyond N
         S(:, N+1:end) = 0;      %For all rows beyond N
         compressedImage(:,:,i) = U * S * V';
-        N1=size(S);
     end
     originalImage=double((image));
     ComMatrix=double((compressedImage));
-
 
 
 
@@ -34,37 +32,39 @@ end
 error1 = diff * 100 / (m*n);
 
 
+% Step 1: Compute Mean Squared Error (MSE) for each channel
+mse_r = sum(sum((originalImage(:,:,1) - ComMatrix(:,:,1)).^2)) / numel(originalImage(:,:,1));
+mse_g = sum(sum((originalImage(:,:,2) - ComMatrix(:,:,2)).^2)) / numel(originalImage(:,:,2));
+mse_b = sum(sum((originalImage(:,:,3) - ComMatrix(:,:,3)).^2)) / numel(originalImage(:,:,3));
 
+% Step 2: Calculate Max value for each channel
+maxPixelValue_r = max(originalImage(:,:,1), [], 'all');
+maxPixelValue_g = max(originalImage(:,:,2), [], 'all');
+maxPixelValue_b = max(originalImage(:,:,3), [], 'all');
 
+% Step 4: Convert error to percentage scale for each channel
+compressionErrorPercentage_r = (mse_r / (maxPixelValue_r^2)) * 100;
+compressionErrorPercentage_g = (mse_g / (maxPixelValue_g^2)) * 100;
+compressionErrorPercentage_b = (mse_b / (maxPixelValue_b^2)) * 100;
 
+nonBlack=3;
 
+if isnan(compressionErrorPercentage_r)
+    compressionErrorPercentage_r = 0;
+    nonBlack=nonBlack-1;
+end
 
+if isnan(compressionErrorPercentage_g)
+    compressionErrorPercentage_g = 0;
+    nonBlack=nonBlack-1;
+end
 
+if isnan(compressionErrorPercentage_b)
+    compressionErrorPercentage_b = 0;
+    nonBlack=nonBlack-1;
+end
 
-    
-% Assuming originalImage and compressedImage are your original and compressed image matrices
+errors=[compressionErrorPercentage_r compressionErrorPercentage_g compressionErrorPercentage_b];
+error=[error1 (sum(errors))/nonBlack];
 
-% Step 1: Compute Mean Squared Error (MSE)
-mse = sum(sum((originalImage - ComMatrix).^2)) / numel(originalImage);
-
-% Step 2: Calculate Peak Signal-to-Noise Ratio (PSNR)
-maxPixelValue = max(originalImage(:));
-
-% Step 3: Convert PSNR to percentage scale (assuming higher PSNR implies lower error)
-compressionErrorPercentage = (mse / (maxPixelValue^2)) * 100;
-
-% Display the compression error percentage
-% disp(['Compression Error Percentage: ', num2str(compressionErrorPercentage), '%']);
-
-errors=compressionErrorPercentage;
-error=[error1 (sum(errors))];
-
-
-    % % Calculate compression error
-    % errornum = sum(abs(compressedImage(:) - double(image(:))));
-    % errordenom = numel(image) * 3 * 256;
-    % error = 100 * errornum / errordenom;
-    % size(image);
-    % "Original singular values: "; N1;
-    % "New singular values: "; N;
 end
